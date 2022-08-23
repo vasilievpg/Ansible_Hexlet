@@ -1,0 +1,36 @@
+- hosts: tangerine
+  gather_facts: no
+
+  tasks:
+    - name: Set authorized key took from file
+      authorized_key:
+        user: user
+        state: present
+        key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub') }}"
+
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+      become: yes
+
+    - name: Copy index.html
+      ansible.builtin.copy:
+        src: files/index.html
+        dest: /usr/share/nginx/html/index.html
+      become: yes
+
+    - name: update nginx config
+      ansible.builtin.copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - restart nginx
+      become: yes
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+      become: yes
