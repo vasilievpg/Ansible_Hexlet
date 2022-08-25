@@ -1,0 +1,30 @@
+- hosts: webservers
+  gather_facts: no
+
+  tasks:
+    - name: Set authorized key took from file
+      authorized_key:
+        user: user
+        state: present
+        key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub') }}"
+
+    - name: Copy index.html
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: '{{root_dir}}/index.html'
+      become: yes
+
+    - name: update nginx config
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - restart nginx
+      become: yes
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+      become: yes
