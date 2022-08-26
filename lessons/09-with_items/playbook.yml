@@ -1,0 +1,36 @@
+- hosts: webservers
+
+  vars:
+    users:
+      - jaime
+      - sansa
+      - robert
+
+  tasks:
+    - name: Set authorized key took from file
+      authorized_key:
+        user: user
+        state: present
+        key: "{{ lookup('file', '/home/user/.ssh/id_rsa.pub') }}"
+
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+      become: yes
+
+    - name: add test users
+      ansible.builtin.user:
+        name: '{{ item }}'
+        state: present
+      loop: '{{ users }}'
+      become: yes
+
+# Не получилось
+# - name: gitconfig.j2
+#   ansible.builtin.template:
+#     name: '{{ item }}'
+#     src: templates/gitconfig.j2
+#     dest: '/home/{{ item }}/.gitconfig'
+#   loop: '{{ users }}'
+#   become: yes
