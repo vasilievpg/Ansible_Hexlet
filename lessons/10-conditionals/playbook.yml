@@ -1,0 +1,14 @@
+- hosts: webservers
+  tasks:
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+      become: yes # <---
+      when: ansible_os_family == "Debian"
+
+    - name: update cache
+      ansible.builtin.apt:
+        update_cache: yes
+      become: yes # <---
+      when: ansible_os_family == "Debian"
