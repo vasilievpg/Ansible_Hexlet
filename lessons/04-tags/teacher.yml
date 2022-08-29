@@ -1,0 +1,16 @@
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Special task
+      command: echo 'yeah!'
+      register: result
+      # BEGIN
+      tags: special
+      # END
+
+    - name: 'Check tags'
+      fail:
+        msg: 'Expected result is defined'
+      when: result is not defined
+      tags: special
