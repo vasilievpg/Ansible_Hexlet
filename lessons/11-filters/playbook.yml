@@ -10,4 +10,4 @@
       ansible.builtin.template:
         src: templates/index.html.j2
         dest: '{{root_dir}}/index.html'
-      become: yes
+        become: yes
