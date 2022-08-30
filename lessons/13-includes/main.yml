@@ -4,5 +4,5 @@
 - name: Include playbook_install_git.yml
   ansible.builtin.import_playbook: playbook_install_git.yml
 
-- name: Include   playbook_install_nginx.yml
+- name: Include playbook_install_nginx.yml
   ansible.builtin.import_playbook: playbook_install_nginx.yml
