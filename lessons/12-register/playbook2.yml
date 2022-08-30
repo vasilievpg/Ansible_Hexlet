@@ -1,0 +1,26 @@
+- hosts: nobelium
+
+  vars:
+    server_name: "{{ ansible_facts['hostname']}}"
+    str: This is server {{ server_name }}!
+    root_dir: '/usr/share/nginx/html'
+
+  tasks:
+    - name: install cowsay
+      ansible.builtin.apt:
+        name: cowsay
+        state: present
+      become: yes # <---
+
+    - ansible.builtin.command: cowsay "This is server {{ server_name }}!"
+      register: cowsay_result
+
+    - name: print cowsay "Hello, from web server!"
+      ansible.builtin.debug:
+        var: cowsay_result.stdout_lines
+
+    - name: Copy index.html
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: '{{root_dir}}/index.html'
+      become: yes
