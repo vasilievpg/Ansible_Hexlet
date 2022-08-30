@@ -1,0 +1,6 @@
+- hosts: nobelium
+
+  roles:
+    - role: gavika.ansible_role_nodejs
+      vars:
+        nodejs_version: '16.x'
