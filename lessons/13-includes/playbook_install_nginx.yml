@@ -1,0 +1,9 @@
+- hosts: nobelium
+  gather_facts: no
+
+  tasks:
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+      become: yes

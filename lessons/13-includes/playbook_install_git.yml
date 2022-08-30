@@ -1,0 +1,16 @@
+- hosts: nobelium
+  gather_facts: no
+
+  tasks:
+
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+      become: yes # <---
+      tags: git
+
+    - name: update cache
+      ansible.builtin.apt:
+        update_cache: yes
+      become: yes # <---
