@@ -1,0 +1,7 @@
+postgresql_databases:
+  - name: postgres
+    port: 5432
+postgresql_users:
+  - name: postgres
+    password: postgres
+    db: postgres

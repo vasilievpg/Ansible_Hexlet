@@ -1,0 +1,41 @@
+- hosts: nobelium
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: geerlingguy.nodejs
+      vars:
+        nodejs_version: '16.x'
+
+    - role: geerlingguy.postgresql
+      become: yes
+
+  tasks:
+    - name: Install postgresql
+      ansible.builtin.apt:
+        name: postgresql
+        state: present
+      become: yes
+
+    - name: update cache
+      ansible.builtin.apt:
+        update_cache: yes
+      become: yes # <---
+
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/hexlet-components/js-fastify-blog.git
+        dest: /home/user/js-fastify-blog
+        clone: yes
+        update: yes
+
+    - name: Copy .env
+      ansible.builtin.copy:
+        src: files/.env
+        dest: /home/user/js-fastify-blog/.env
+      become: yes
+
+    - name: Install packages based on package.json.
+      community.general.npm:
+        path: /home/user/js-fastify-blog
+      tags: npm
