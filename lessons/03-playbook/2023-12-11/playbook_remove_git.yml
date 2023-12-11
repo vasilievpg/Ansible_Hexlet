@@ -1,0 +1,10 @@
+- hosts: webservers
+  gather_facts: no
+
+  tasks:
+     - name: remove git
+       ansible.builtin.apt:
+          name: git
+          state: absent
+          update_cache: yes
+       become: yes
