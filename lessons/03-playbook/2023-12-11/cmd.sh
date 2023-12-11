@@ -1,0 +1,1 @@
+ansible-playbook playbook_install_git.yml -i inventory.ini
